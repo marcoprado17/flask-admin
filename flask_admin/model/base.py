@@ -2010,7 +2010,7 @@ class BaseModelView(BaseView, ActionsMixin):
                     # save button
                     return redirect(self.get_save_return_url(model, is_created=True))
 
-        form_opts = FormOpts(widget_args=self.form_widget_args,
+        form_opts = FormOpts(widget_args=self.form_widget_args if not callable(self.form_widget_args) else self.form_widget_args(),
                              form_rules=self._form_create_rules)
 
         if self.create_modal and request.args.get('modal'):
@@ -2061,7 +2061,7 @@ class BaseModelView(BaseView, ActionsMixin):
         if request.method == 'GET' or form.errors:
             self.on_form_prefill(form, id)
 
-        form_opts = FormOpts(widget_args=self.form_widget_args,
+        form_opts = FormOpts(widget_args=self.form_widget_args if not callable(self.form_widget_args) else self.form_widget_args(),
                              form_rules=self._form_edit_rules)
 
         if self.edit_modal and request.args.get('modal'):
