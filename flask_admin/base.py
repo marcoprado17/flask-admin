@@ -562,6 +562,8 @@ class Admin(object):
         # assume index view is always the first element of views.
         if len(self._views) > 0:
             self._views[0] = self.index_view
+            # assume that self._menu[0] is a MenuView (not a MenuCategory) for the current index_view
+            self._menu[0]._view = self.index_view
         else:
             self.add_view(self.index_view)
 
