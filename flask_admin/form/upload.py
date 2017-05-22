@@ -305,6 +305,7 @@ class ImageUploadField(FileUploadField):
                  base_path=None, relative_path=None,
                  namegen=None, allowed_extensions=None,
                  max_size=None,
+                 size=None,
                  thumbgen=None, thumbnail_size=None,
                  permission=0o666,
                  url_relative_path=None, endpoint='static',
@@ -379,6 +380,7 @@ class ImageUploadField(FileUploadField):
             raise ImportError('PIL library was not found')
 
         self.max_size = max_size
+        self.size = size
         self.thumbnail_fn = thumbgen or thumbgen_filename
         self.thumbnail_size = thumbnail_size
         self.endpoint = endpoint
@@ -427,8 +429,10 @@ class ImageUploadField(FileUploadField):
         # Figure out format
         filename, format = self._get_save_format(filename, self.image)
 
-        if self.image and (self.image.format != format or self.max_size):
-            if self.max_size:
+        if self.image and (self.image.format != format or self.size or self.max_size):
+            if self.size:
+                image = self._resize_2(self.image, self.size)
+            elif self.max_size:
                 image = self._resize(self.image, self.max_size)
             else:
                 image = self.image
@@ -462,6 +466,9 @@ class ImageUploadField(FileUploadField):
                 return thumb
 
         return image
+
+    def _resize_2(self, image, size):
+        return ImageOps.fit(self.image, size, Image.ANTIALIAS)
 
     def _save_image(self, image, path, format='JPEG'):
         if image.mode not in ('RGB', 'RGBA'):
