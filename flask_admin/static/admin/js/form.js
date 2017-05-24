@@ -9,9 +9,26 @@
       function processAjaxWidget($el, name) {
         var multiple = $el.attr('data-multiple') == '1';
 
+        // TODO: Consider indicate match when there is a dismatch between the case of the letters
+        var format=function(elem){
+          var elemAsHtml = $(elem.text);
+          var queryText = $("input.select2-input").val();
+          elemAsHtml.each(function(){
+            var subElem = $(this);
+            if(subElem.prop("tagName") == "SEARCHABLE"){
+                var text = subElem.html();
+                text = text.replace(new RegExp(queryText, 'gi'), "<u>$&</u>");
+                subElem.html(text)
+            }
+          });
+          return $('<div>').append(elemAsHtml).html();
+        };
+
         var opts = {
           width: 'resolve',
           minimumInputLength: 1,
+          formatResult: format,
+          escapeMarkup: function (markup) { return markup; },
           placeholder: 'data-placeholder',
           ajax: {
             url: $el.attr('data-url'),
