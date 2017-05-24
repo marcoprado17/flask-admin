@@ -13,13 +13,11 @@
         var format=function(elem){
           var elemAsHtml = $(elem.text);
           var queryText = $("input.select2-input").val();
-          elemAsHtml.each(function(){
-            var subElem = $(this);
-            if(subElem.prop("tagName") == "SEARCHABLE"){
-                var text = subElem.html();
-                text = text.replace(new RegExp(queryText, 'gi'), "<u>$&</u>");
-                subElem.html(text)
-            }
+          elemAsHtml.find("searchable").each(function(){
+            var searchableElem = $(this);
+            var text = searchableElem.html();
+            text = text.replace(new RegExp(queryText, 'gi'), "<u>" + queryText + "</u>");
+            searchableElem.html(text)
           });
           return $('<div>').append(elemAsHtml).html();
         };
