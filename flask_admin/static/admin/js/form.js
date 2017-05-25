@@ -316,6 +316,14 @@
                 return true;
         }
 
+        var deteminantTo = $($el.attr("data-determinant-to"));
+        if(deteminantTo.length){
+            $el.on("change", function (evt) {
+                console.log("change!");
+                deteminantTo.val("").trigger('change');
+            })
+        }
+
         // make x-editable's POST compatible with WTForms
         // for x-editable, x-editable-combodate, and x-editable-boolean cases
         var overrideXeditableParams = function(params) {
