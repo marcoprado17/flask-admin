@@ -3,29 +3,30 @@
       // Field converters
       var fieldConverters = [];
 
-      /**
-      * Process AJAX fk-widget
-      */
-      function processAjaxWidget($el, name) {
-        var multiple = $el.attr('data-multiple') == '1';
-
-        var format=function(elem){
-          var elemAsHtml = $(elem.text);
-          elemAsHtml = $("<div>").append(elemAsHtml);
+      var formatSelectOption=function($el){
+        return function (elem) {
+          var elemAsHtml = $("<div>"+elem.text+"</div>");
           var queryText = $el.parent().find("input.select2-input").val();
           elemAsHtml.find("searchable").each(function(){
             var searchableElem = $(this);
             var text = searchableElem.html();
             text = text.replace(new RegExp(queryText, 'gi'), "<u>" + queryText + "</u>");
             searchableElem.html(text)
-          });
+           });
           return $("<div>").append(elemAsHtml).html();
         };
+      };
+
+      /**
+      * Process AJAX fk-widget
+      */
+      function processAjaxWidget($el, name) {
+        var multiple = $el.attr('data-multiple') == '1';
 
         var opts = {
           width: 'resolve',
           minimumInputLength: 1,
-          formatResult: format,
+          formatResult: formatSelectOption($el),
           escapeMarkup: function (markup) { return markup; },
           placeholder: 'data-placeholder',
           ajax: {
@@ -323,7 +324,9 @@
         switch (name) {
             case 'select2':
                 var opts = {
-                    width: 'resolve'
+                    width: 'resolve',
+                    formatResult: formatSelectOption($el),
+                    escapeMarkup: function (markup) { return markup; }
                 };
 
                 if ($el.attr('data-allow-blank'))
