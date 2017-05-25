@@ -7,13 +7,20 @@
         return function (elem) {
           var elemAsHtml = $("<div>"+elem.text+"</div>");
           var queryText = $el.parent().find("input.select2-input").val();
+          if(queryText === undefined){
+              var id = $el.parent().find("input.select2-focusser.select2-offscreen").attr("id") + "_search";
+              queryText = $("#"+id).val();
+              if(queryText === undefined || queryText === null){
+                  return elem.text
+              }
+          }
           elemAsHtml.find("searchable").each(function(){
             var searchableElem = $(this);
             var text = searchableElem.html();
             text = text.replace(new RegExp(queryText, 'gi'), "<u>" + queryText + "</u>");
             searchableElem.html(text)
            });
-          return $("<div>").append(elemAsHtml).html();
+          return elemAsHtml.html();
         };
       };
 
