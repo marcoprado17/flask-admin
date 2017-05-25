@@ -9,17 +9,17 @@
       function processAjaxWidget($el, name) {
         var multiple = $el.attr('data-multiple') == '1';
 
-        // TODO: Consider indicate match when there is a dismatch between the case of the letters
         var format=function(elem){
           var elemAsHtml = $(elem.text);
-          var queryText = $("input.select2-input").val();
+          elemAsHtml = $("<div>").append(elemAsHtml);
+          var queryText = $el.parent().find("input.select2-input").val();
           elemAsHtml.find("searchable").each(function(){
             var searchableElem = $(this);
             var text = searchableElem.html();
             text = text.replace(new RegExp(queryText, 'gi'), "<u>" + queryText + "</u>");
             searchableElem.html(text)
           });
-          return $('<div>').append(elemAsHtml).html();
+          return $("<div>").append(elemAsHtml).html();
         };
 
         var opts = {
