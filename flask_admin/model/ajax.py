@@ -30,7 +30,7 @@ class AjaxModelLoader(object):
         """
         raise NotImplementedError()
 
-    def get_list(self, query, offset=0, limit=DEFAULT_PAGE_SIZE):
+    def get_list(self, query, offset=0, limit=DEFAULT_PAGE_SIZE,  v0=None, v1=None, v2=None):
         """
             Return models that match `query`.
 

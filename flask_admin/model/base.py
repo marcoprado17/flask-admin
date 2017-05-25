@@ -2277,13 +2277,16 @@ class BaseModelView(BaseView, ActionsMixin):
         query = request.args.get('query')
         offset = request.args.get('offset', type=int)
         limit = request.args.get('limit', 10, type=int)
+        v0 = request.args.get('v0')
+        v1 = request.args.get('v1')
+        v2 = request.args.get('v2')
 
         loader = self._form_ajax_refs.get(name)
 
         if not loader:
             abort(404)
 
-        data = [loader.format(m) for m in loader.get_list(query, offset, limit)]
+        data = [loader.format(m) for m in loader.get_list(query, offset, limit, v0, v1, v2)]
         return Response(json.dumps(data), mimetype='application/json')
 
     @expose('/ajax/update/', methods=('POST',))
