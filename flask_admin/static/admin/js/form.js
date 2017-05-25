@@ -31,10 +31,28 @@
           ajax: {
             url: $el.attr('data-url'),
             data: function(term, page) {
+                var v0Determinant=$($el.attr('v0-data-depends-on'));
+                var v0=null;
+                if(v0Determinant){
+                    v0=v0Determinant.val();
+                }
+                var v1Determinant=$($el.attr('v1-data-depends-on'));
+                var v1=null;
+                if(v1Determinant){
+                    v1=v1Determinant.val();
+                }
+                var v2Determinant=$($el.attr('v2-data-depends-on'));
+                var v2=null;
+                if(v2Determinant){
+                    v2=v2Determinant.val();
+                }
               return {
                 query: term,
                 offset: (page - 1) * 10,
-                limit: 10
+                limit: 10,
+                v0: v0,
+                v1: v1,
+                v2: v2
               };
             },
             results: function(data, page) {
